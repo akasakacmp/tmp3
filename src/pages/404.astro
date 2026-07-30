@@ -1,0 +1,92 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="404 - ページが見つかりません" noindex={true}>
+  <main class="error-page">
+    <div class="container">
+      <h1>404</h1>
+      <h2>お探しのページは見つかりませんでした</h2>
+      <p>
+        アクセスしようとしたページは削除されたか、URLが変更されたか、<br
+          class="desktop-only"
+        />
+        あるいは最初から存在しない可能性があります。
+      </p>
+      <div class="actions">
+        <a href="/" class="btn-home">トップページへ戻る</a>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .error-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    text-align: center;
+    padding: 4rem 2rem;
+    font-family: sans-serif;
+  }
+
+  .container {
+    max-width: 600px;
+  }
+
+  h1 {
+    font-size: 6rem;
+    font-weight: bold;
+    margin: 0;
+    color: #cbd5e1; /* 威圧感を与えない薄いグレーなど */
+    line-height: 1;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+    color: #334155;
+  }
+
+  p {
+    color: #64748b;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+  }
+
+  .desktop-only {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .desktop-only {
+      display: inline;
+    }
+  }
+
+  .actions {
+    margin-top: 2rem;
+  }
+
+  .btn-home {
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    background-color: #0f172a;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition:
+      background-color 0.2s ease,
+      transform 0.1s ease;
+  }
+
+  .btn-home:hover {
+    background-color: #334155;
+  }
+
+  .btn-home:active {
+    transform: scale(0.98);
+  }
+</style>

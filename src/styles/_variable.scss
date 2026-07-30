@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+/*----------------------------------------------
+variable
+----------------------------------------------*/
+
+$site-width:1110px;
+
+@mixin media_query_pc{
+  @media (min-width: $site-width){
+    @content;
+  }
+}
+@mixin media_query_tablet{
+  @media (min-width: 768px) and (max-width: #{$site-width - 1px}){
+    @content;
+  }
+}
+@mixin media_query_sp{
+  @media (max-width: 767px){
+    @content;
+  }
+}
+
+/* 375pxデザイン時のpxからvwを計算 ------------*/
+/* calc内で使いたい場合: calc( 100% - #{vw(10)} ); */
+@function vw($size, $viewport: 375) {
+  @return $size / $viewport * 100 * 1vw;
+}
