@@ -18,11 +18,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <title>{finalTitle}</title>
 <meta name="description" content={finalDesc} />
 
-<!-- noindexの制御 -->
+{/* noindexの制御 */}
 {noindex && <meta name="robots" content="noindex,nofollow" />}
 <link rel="canonical" href={canonicalURL} />
 
-<!-- OGP / Twitter Card の最適化 -->
+{/* OGP / Twitter Card の最適化 */}
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDesc} />
 <meta property="og:image" content={new URL(ogImage, Astro.site)} />

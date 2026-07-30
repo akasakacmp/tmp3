@@ -1,7 +1,10 @@
 ---
 // src/layouts/Layout.astro
 import "../styles/reset.css";
+import "@fontsource-variable/noto-sans-jp";
 import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 const { title, description, noindex } = Astro.props;
 ---
@@ -13,6 +16,18 @@ const { title, description, noindex } = Astro.props;
     <SEO title={title} description={description} noindex={noindex} />
   </head>
   <body>
+    <Header />
     <slot />
+    <Footer />
   </body>
 </html>
+
+<style is:global>
+  body {
+    display: flex;
+    flex-direction: column;
+    font-family: "Noto Sans JP", sans-serif;
+    min-height: 100vh;
+    margin: 0;
+  }
+</style>

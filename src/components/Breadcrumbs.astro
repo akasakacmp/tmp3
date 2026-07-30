@@ -1,0 +1,107 @@
+---
+// src/components/Breadcrumbs.astro
+
+interface Props {
+  items: {
+    name: string;
+    href?: string;
+  }[];
+}
+
+const { items } = Astro.props;
+
+// JSON-LD (構造化データ) の構築
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: items.map((item, index) => {
+    const schemaItem: any = {
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+    };
+
+    // hrefが存在する場合のみURLを追加し、Astro.siteを利用して絶対パスに変換
+    // 開発環境でもエラーにならないよう Astro.url.origin をフォールバックにしています
+    if (item.href) {
+      const baseUrl = Astro.site || Astro.url.origin;
+      schemaItem.item = new URL(item.href, baseUrl).href;
+    }
+    return schemaItem;
+  }),
+};
+---
+
+{/* 1. 見た目（UI）のパンくずリスト */}
+<nav aria-label="パンくずリスト" class="breadcrumb-nav">
+  <ol class="breadcrumb-list">
+    {
+      items.map((item, index) => {
+        // 最後の項目（現在地）かどうかを判定
+        const isLast = index === items.length - 1;
+
+        return (
+          <li class="breadcrumb-item">
+            {item.href && !isLast ? (
+              <a href={item.href}>{item.name}</a>
+            ) : (
+              // 最後の項目、またはリンク先がない場合はテキストのみ表示
+              <span aria-current="page">{item.name}</span>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>
+
+{/* 2. 検索エンジン用の構造化データ (JSON-LD)[cite: 1] */}
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(breadcrumbSchema)}
+/>
+
+<style>
+  /* テンプレート用の最低限のスタイル（プロジェクトに合わせて調整してください） */
+  .breadcrumb-nav {
+    font-size: 0.875rem; /* 14px相当 */
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .breadcrumb-item a {
+    color: #2563eb;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .breadcrumb-item a:hover {
+    color: #1d4ed8;
+  }
+
+  .breadcrumb-item span {
+    color: #64748b;
+  }
+
+  /* 区切り文字（>）をCSSで追加 */
+  .breadcrumb-item:not(:last-child)::after {
+    content: ">";
+    margin-left: 0.5rem;
+    color: #94a3b8;
+    font-size: 0.8em;
+  }
+</style>

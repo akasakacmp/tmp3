@@ -1,43 +1,54 @@
-# Astro Starter Kit: Minimal
+# README
 
-```sh
-npm create astro@latest -- --template minimal
+## パンくず記述例
+
+### パターンA: 固定ページ（例: 会社概要 src/pages/about.astro）での使い方
+
+```
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+---
+
+<Layout title="会社概要">
+  <Breadcrumbs
+    items={[
+      { name: 'ホーム', href: '/' },
+      { name: '会社概要' } // 現在地はリンク(href)不要
+    ]}
+  />
+  <main>
+    <h1>会社概要</h1>
+    <!-- コンテンツ -->
+  </main>
+</Layout>
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### パターンB: ブログ記事やコンテンツコレクション（動的ルーティング）での使い方
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
 ```
+---
+// 例: src/pages/blog/[slug].astro
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+// getStaticPaths等で取得した記事データが post に入っている想定
+const { post } = Astro.props;
+---
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+<Layout title={post.data.title}>
+  <Breadcrumbs
+    items={[
+      { name: 'ホーム', href: '/' },
+      { name: 'ブログ一覧', href: '/blog' },
+      { name: post.data.title } // 記事タイトルを現在地にする
+    ]}
+  />
+  <main>
+    <h1>{post.data.title}</h1>
+    <article>
+      <Content />
+    </article>
+  </main>
+</Layout>
+```

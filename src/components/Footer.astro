@@ -1,0 +1,144 @@
+---
+// src/components/Footer.astro
+
+// 現在の年を動的に取得する
+const currentYear = new Date().getFullYear();
+
+// フッターのナビゲーションリンクを配列で管理
+const footerLinks = [
+  { name: "プライバシーポリシー", href: "/privacy" },
+  { name: "利用規約", href: "/terms" },
+  { name: "お問い合わせ", href: "/contact" },
+];
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      {/* サイトロゴ・情報エリア */}
+      <div class="footer-info">
+        <a href="/" class="footer-logo">My Website</a>
+        <p class="footer-description">
+          ここにサイトの簡単な説明や、<br />
+          会社の住所などを記載します。
+        </p>
+      </div>
+
+      {/* ナビゲーションエリア */}
+      <nav class="footer-nav">
+        <ul class="footer-links">
+          {
+            footerLinks.map((link) => (
+              <li>
+                <a href={link.href} class="footer-link">
+                  {link.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    {/* コピーライトエリア */}
+    <div class="footer-bottom">
+      <small class="copyright">
+        &copy; {currentYear} My Website. All rights reserved.
+      </small>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* フッター全体のスタイル */
+  .footer {
+    background-color: #1e293b; /* ダークな背景色 */
+    color: #f8fafc;
+    padding: 3rem 1rem 1rem;
+    margin-top: auto; /* コンテンツが少ない場合にフッターを下部に押しやる用 */
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* 上部のコンテンツエリア */
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  /* PCサイズ以上でのレイアウト (横並び) */
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+
+  .footer-info {
+    max-width: 400px;
+  }
+
+  .footer-logo {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .footer-description {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 0.875rem;
+  }
+
+  /* フッターリンク */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* PCサイズでのリンクレイアウト */
+  @media (min-width: 768px) {
+    .footer-links {
+      flex-direction: row;
+      gap: 2rem;
+    }
+  }
+
+  .footer-link {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* 下部のコピーライトエリア */
+  .footer-bottom {
+    border-top: 1px solid #334155;
+    padding-top: 1.5rem;
+    text-align: center;
+  }
+
+  .copyright {
+    color: #64748b;
+    font-size: 0.75rem;
+  }
+</style>

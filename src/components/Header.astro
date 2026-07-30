@@ -1,0 +1,202 @@
+---
+// src/components/Header.astro
+
+// 必要に応じてPropsでサイト名などを受け取る設計にもできます
+// const { siteName = "My Website" } = Astro.props;
+
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Services", href: "/services" },
+  { name: "Contact", href: "/contact" },
+];
+---
+
+<header class="header">
+  <div class="header-container">
+    <a href="/" class="logo">
+      {/* サイトロゴ。画像に差し替えてもOK */}
+      My Website
+    </a>
+
+    {/* ハンバーガーメニューボタン (モバイル用) */}
+    <button
+      class="menu-toggle"
+      id="js-menu-toggle"
+      aria-expanded="false"
+      aria-label="メニューを開閉する"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    {/* ナビゲーションメニュー */}
+    <nav class="global-nav" id="js-global-nav">
+      <ul class="nav-list">
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href} class="nav-link">
+                {item.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style lang="scss">
+  /* 共通・ベーススタイル */
+  .header {
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1e293b;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  /* PC向けナビゲーション */
+  .global-nav {
+    display: none; /* デフォルトは非表示 (モバイル対応のため) */
+  }
+
+  .nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    color: #475569;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    &:hover {
+      color: #2563eb;
+    }
+  }
+
+  /* ハンバーガーメニューボタン */
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 2px;
+    background-color: #1e293b;
+    transition: all 0.3s linear;
+    transform-origin: 1px;
+  }
+
+  /* メニュー展開時のボタンの動き */
+  .menu-toggle[aria-expanded="true"] {
+    .hamburger-line:first-child {
+      transform: rotate(45deg);
+    }
+    .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg);
+    }
+  }
+
+  /* PCサイズ (768px以上) での表示 */
+  @include var.media_query_pc {
+    .menu-toggle {
+      display: none; /* PCではハンバーガーボタンを隠す */
+    }
+
+    .global-nav {
+      display: block; /* PCではナビゲーションを表示 */
+    }
+  }
+
+  /* モバイル展開時のメニュー */
+  @include var.media_query_sp {
+    .global-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: none; /* 初期状態は非表示 */
+      &.is-active {
+        display: block; /* JavaScriptでクラスが付与されたら表示 */
+      }
+    }
+
+    .nav-list {
+      flex-direction: column;
+      gap: 0;
+      li {
+        border-top: 1px solid #f1f5f9;
+      }
+    }
+
+    .nav-link {
+      display: block;
+      padding: 1rem;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  // ハンバーガーメニューの開閉制御
+  // Astroでは、コンポーネント内のscriptはデフォルトでモジュールとして扱われ、
+  // ページ読み込み時に一度だけ実行されます。(ViewTransitions使用時は工夫が必要な場合があります)
+
+  const setupMenu = () => {
+    const toggleBtn = document.getElementById("js-menu-toggle");
+    const nav = document.getElementById("js-global-nav");
+
+    if (toggleBtn && nav) {
+      toggleBtn.addEventListener("click", () => {
+        const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+
+        // アクセシビリティ属性の更新
+        toggleBtn.setAttribute("aria-expanded", String(!isExpanded));
+
+        // メニューの表示/非表示クラスの切り替え
+        nav.classList.toggle("is-active");
+      });
+    }
+  };
+
+  // DOMの読み込みが完了したら実行
+  document.addEventListener("DOMContentLoaded", setupMenu);
+</script>
