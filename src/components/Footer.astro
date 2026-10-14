@@ -1,14 +1,15 @@
 ---
 // src/components/Footer.astro
+import { SITE_NAME } from "../consts";
 
 // 現在の年を動的に取得する
 const currentYear = new Date().getFullYear();
 
 // フッターのナビゲーションリンクを配列で管理
 const footerLinks = [
-  { name: "プライバシーポリシー", href: "/privacy" },
-  { name: "利用規約", href: "/terms" },
-  { name: "お問い合わせ", href: "/contact" },
+  { name: "プライバシーポリシー", href: "/privacy/" },
+  { name: "利用規約", href: "/terms/" },
+  { name: "お問い合わせ", href: "/contact/" },
 ];
 ---
 
@@ -17,7 +18,7 @@ const footerLinks = [
     <div class="footer-content">
       {/* サイトロゴ・情報エリア */}
       <div class="footer-info">
-        <a href="/" class="footer-logo">My Website</a>
+        <a href="/" class="footer-logo">{SITE_NAME}</a>
         <p class="footer-description">
           ここにサイトの簡単な説明や、<br />
           会社の住所などを記載します。
@@ -43,13 +44,13 @@ const footerLinks = [
     {/* コピーライトエリア */}
     <div class="footer-bottom">
       <small class="copyright">
-        &copy; {currentYear} My Website. All rights reserved.
+        &copy; {currentYear} {SITE_NAME}. All rights reserved.
       </small>
     </div>
   </div>
 </footer>
 
-<style>
+<style lang="scss">
   /* フッター全体のスタイル */
   .footer {
     background-color: #1e293b; /* ダークな背景色 */
@@ -71,8 +72,8 @@ const footerLinks = [
     margin-bottom: 2rem;
   }
 
-  /* PCサイズ以上でのレイアウト (横並び) */
-  @media (min-width: 768px) {
+  /* タブレット・PCサイズ (768px以上) でのレイアウト (横並び) */
+  @include var.media_query_tablet_up {
     .footer-content {
       flex-direction: row;
       justify-content: space-between;
@@ -109,8 +110,8 @@ const footerLinks = [
     gap: 1rem;
   }
 
-  /* PCサイズでのリンクレイアウト */
-  @media (min-width: 768px) {
+  /* タブレット・PCサイズ (768px以上) でのリンクレイアウト */
+  @include var.media_query_tablet_up {
     .footer-links {
       flex-direction: row;
       gap: 2rem;

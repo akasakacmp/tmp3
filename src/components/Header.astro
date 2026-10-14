@@ -1,14 +1,12 @@
 ---
 // src/components/Header.astro
-
-// 必要に応じてPropsでサイト名などを受け取る設計にもできます
-// const { siteName = "My Website" } = Astro.props;
+import { SITE_NAME } from "../consts";
 
 const navItems = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Contact", href: "/contact" },
+  { name: "About", href: "/about/" },
+  { name: "Services", href: "/services/" },
+  { name: "Contact", href: "/contact/" },
 ];
 ---
 
@@ -16,7 +14,7 @@ const navItems = [
   <div class="header-container">
     <a href="/" class="logo">
       {/* サイトロゴ。画像に差し替えてもOK */}
-      My Website
+      {SITE_NAME}
     </a>
 
     {/* ハンバーガーメニューボタン (モバイル用) */}
@@ -133,8 +131,8 @@ const navItems = [
     }
   }
 
-  /* PCサイズ (768px以上) での表示 */
-  @include var.media_query_pc {
+  /* タブレット・PCサイズ (768px以上) での表示 */
+  @include var.media_query_tablet_up {
     .menu-toggle {
       display: none; /* PCではハンバーガーボタンを隠す */
     }

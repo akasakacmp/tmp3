@@ -1,10 +1,13 @@
 @charset "UTF-8";
 
+@use "sass:math";
+
 /*----------------------------------------------
 variable
 ----------------------------------------------*/
 
 $site-width:1110px;
+$tablet-width:768px;
 
 @mixin media_query_pc{
   @media (min-width: $site-width){
@@ -12,12 +15,17 @@ $site-width:1110px;
   }
 }
 @mixin media_query_tablet{
-  @media (min-width: 768px) and (max-width: #{$site-width - 1px}){
+  @media (min-width: $tablet-width) and (max-width: #{$site-width - 1px}){
+    @content;
+  }
+}
+@mixin media_query_tablet_up{
+  @media (min-width: $tablet-width){
     @content;
   }
 }
 @mixin media_query_sp{
-  @media (max-width: 767px){
+  @media (max-width: #{$tablet-width - 1px}){
     @content;
   }
 }
@@ -25,5 +33,5 @@ $site-width:1110px;
 /* 375pxデザイン時のpxからvwを計算 ------------*/
 /* calc内で使いたい場合: calc( 100% - #{vw(10)} ); */
 @function vw($size, $viewport: 375) {
-  @return $size / $viewport * 100 * 1vw;
+  @return math.div($size, $viewport) * 100 * 1vw;
 }

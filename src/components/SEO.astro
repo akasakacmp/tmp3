@@ -1,14 +1,16 @@
 ---
 // src/components/SEO.astro
+import { SITE_NAME } from "../consts";
+
 const {
   title,
   description,
   noindex = false,
   ogImage = "/default-ogp.png", // public直下に仮のデフォルト画像を置いておく
+  ogType = "website", // 記事ページでは "article" を渡す
 } = Astro.props;
 
-const siteName = "テンプレートサイト";
-const finalTitle = title ? `${title} | ${siteName}` : siteName;
+const finalTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 const finalDesc = description || "デフォルトのサイト説明文...";
 
 // canonical URLを絶対パスで生成する
@@ -23,6 +25,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <link rel="canonical" href={canonicalURL} />
 
 {/* OGP / Twitter Card の最適化 */}
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={SITE_NAME} />
 <meta property="og:title" content={finalTitle} />
 <meta property="og:description" content={finalDesc} />
 <meta property="og:image" content={new URL(ogImage, Astro.site)} />
