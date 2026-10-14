@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# グローバルgitignoreの除外をこのプロジェクトでは打ち消す
+!package.json
+!package-lock.json
