@@ -1,0 +1,122 @@
+---
+// src/pages/about.astro
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+
+const pageTitle = "会社概要";
+const pageDescription = "株式会社サンプルの会社概要・企業理念をご紹介します。";
+
+const breadcrumbItems = [
+  { name: "Home", href: "/" },
+  { name: pageTitle },
+];
+
+// 会社情報（テンプレート用のダミーデータ）
+const companyInfo = [
+  { label: "会社名", value: "株式会社サンプル" },
+  { label: "設立", value: "2015年4月1日" },
+  { label: "代表者", value: "代表取締役 山田 太郎" },
+  { label: "資本金", value: "1,000万円" },
+  { label: "従業員数", value: "25名" },
+  { label: "所在地", value: "〒100-0000 東京都千代田区サンプル町1-2-3 サンプルビル5F" },
+  { label: "事業内容", value: "Webサイト制作、Webシステム開発、Webマーケティング支援" },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="main-content">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <h1 class="page-title">{pageTitle}</h1>
+
+      <section class="section">
+        <h2 class="section-title">企業理念</h2>
+        <p class="lead">「Webの力で、お客様のビジネスをもっと前へ。」</p>
+        <p>
+          私たちは、お客様一人ひとりの課題に寄り添い、成果につながるWebサイトとサービスを提供します。
+          企画から制作、公開後の運用まで、一貫してサポートいたします。
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">会社情報</h2>
+        <dl class="info-list">
+          {
+            companyInfo.map((item) => (
+              <div class="info-row">
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    color: var.$color-gray-800;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var.$color-gray-200;
+    padding-bottom: 0.5rem;
+  }
+
+  .section {
+    margin-bottom: 3rem;
+    color: var.$color-gray-600;
+    line-height: 1.8;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    color: var.$color-gray-900;
+    margin-bottom: 1rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: var.$color-gray-800;
+    margin-bottom: 1rem;
+  }
+
+  .info-list {
+    border-top: 1px solid var.$color-gray-200;
+  }
+
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-bottom: 1px solid var.$color-gray-200;
+
+    @include var.media_query_tablet_up {
+      flex-direction: row;
+    }
+
+    dt {
+      font-weight: bold;
+      color: var.$color-gray-800;
+      @include var.media_query_tablet_up {
+        flex: 0 0 10rem;
+      }
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+</style>

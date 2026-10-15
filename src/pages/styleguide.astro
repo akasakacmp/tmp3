@@ -1,0 +1,590 @@
+---
+// src/pages/styleguide.astro
+// パーツ一覧（スタイルガイド）。制作・確認用のページなので noindex にし、サイトマップからも除外しています
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Button from "../components/Button.astro";
+import Notice from "../components/Notice.astro";
+import Accordion from "../components/Accordion.astro";
+import Pagination from "../components/Pagination.astro";
+import Tag from "../components/Tag.astro";
+
+const pageTitle = "パーツ一覧";
+
+const breadcrumbItems = [
+  { name: "Home", href: "/" },
+  { name: pageTitle },
+];
+
+// ページ内リンク
+const toc = [
+  { id: "typography", name: "1. タグの見た目" },
+  { id: "colors", name: "2. 色見本" },
+  { id: "buttons", name: "3. ボタン" },
+  { id: "forms", name: "4. フォーム部品" },
+  { id: "notice", name: "5-1. お知らせ枠" },
+  { id: "accordion", name: "5-2. 開閉式Q&A" },
+  { id: "pagination", name: "5-3. ページ送り" },
+  { id: "tags", name: "5-4. タグ・ラベル" },
+];
+
+// 色見本（_variable.scss の変数名。色そのものは下の <style> で変数から指定）
+const colorGroups = [
+  {
+    title: "アクセントカラー",
+    colors: ["primary", "primary-hover", "primary-deep", "primary-light"],
+  },
+  {
+    title: "グレー",
+    colors: ["gray-50", "gray-100", "gray-200", "gray-300", "gray-400", "gray-500", "gray-600", "gray-700", "gray-800", "gray-900"],
+  },
+  {
+    title: "その他",
+    colors: ["error"],
+  },
+];
+---
+
+<Layout title={pageTitle} noindex={true}>
+  <main class="main-content">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <h1 class="page-title">{pageTitle}</h1>
+
+      <p class="guide-lead">
+        サイトで使う文字・色・部品の見本です。制作時の確認用ページのため、検索結果には表示されません。
+      </p>
+
+      <nav class="guide-toc" aria-label="目次">
+        <ul>
+          {toc.map((item) => <li><a href={`#${item.id}`}>{item.name}</a></li>)}
+        </ul>
+      </nav>
+
+      {/* ==================== 1. タグの見た目 ==================== */}
+      <section class="guide-section" id="typography">
+        <h2 class="guide-heading">1. タグの見た目</h2>
+        <p class="guide-note">
+          <code>class="content"</code> で囲んだ中のタグに適用されます（<code>src/styles/content.scss</code>）。ブログ本文など Markdown から作られる部分を囲んで使います。
+        </p>
+
+        <div class="guide-sample content">
+          <h1>見出し1（h1）ページのタイトル</h1>
+          <p>
+            本文の段落です。Webサイトの文章は、1行が長くなりすぎないように、適度な幅と行間で読みやすく表示します。
+            <a href="#typography">テキストリンク</a>はアクセントカラーで表示し、<strong>強調（strong）</strong>や<em>斜体（em）</em>、<mark>マーカー（mark）</mark>、<small>注釈（small）</small>、文中のコード <code>npm run build</code> も使えます。
+          </p>
+
+          <h2>見出し2（h2）大きな区切り</h2>
+          <p>h2 は記事の大きな区切りに使います。下線の左側がアクセントカラーになります。</p>
+
+          <h3>見出し3（h3）中くらいの区切り</h3>
+          <p>h3 は h2 の中の小見出しに使います。左側に線が付きます。</p>
+
+          <h4>見出し4（h4）</h4>
+          <p>h4 以降は装飾を控えめにしています。</p>
+
+          <h5>見出し5（h5）</h5>
+          <p>h5 の下の段落です。</p>
+
+          <h6>見出し6（h6）</h6>
+          <p>h6 の下の段落です。</p>
+
+          <h3>リスト</h3>
+          <ul>
+            <li>箇条書き（ul）の項目1</li>
+            <li>
+              箇条書きの項目2
+              <ul>
+                <li>入れ子の項目A</li>
+                <li>入れ子の項目B</li>
+              </ul>
+            </li>
+            <li>箇条書きの項目3</li>
+          </ul>
+          <ol>
+            <li>番号付きリスト（ol）の項目1</li>
+            <li>
+              番号付きリストの項目2
+              <ol>
+                <li>入れ子の項目A</li>
+                <li>入れ子の項目B</li>
+              </ol>
+            </li>
+            <li>番号付きリストの項目3</li>
+          </ol>
+          <dl>
+            <dt>定義リスト（dt）</dt>
+            <dd>用語の説明（dd）が入ります。</dd>
+            <dt>営業時間</dt>
+            <dd>平日 9:00〜18:00（土日祝休み）</dd>
+          </dl>
+
+          <h3>引用・区切り線</h3>
+          <blockquote>
+            <p>引用（blockquote）です。ほかのサイトや書籍から文章を引用するときに使います。</p>
+            <cite>引用元の名前</cite>
+          </blockquote>
+          <hr />
+
+          <h3>表</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>プラン</th>
+                <th>料金（税込）</th>
+                <th>ページ数</th>
+                <th>納期の目安</th>
+                <th>サポート</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ライト</td>
+                <td>330,000円</td>
+                <td>5ページまで</td>
+                <td>1か月</td>
+                <td>メールのみ</td>
+              </tr>
+              <tr>
+                <td>スタンダード</td>
+                <td>660,000円</td>
+                <td>15ページまで</td>
+                <td>2か月</td>
+                <td>メール・電話</td>
+              </tr>
+              <tr>
+                <td>プレミアム</td>
+                <td>お見積り</td>
+                <td>制限なし</td>
+                <td>ご相談</td>
+                <td>専任担当者</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><small>※ 幅が足りないときは、表だけが横にスクロールします。</small></p>
+
+          <h3>画像</h3>
+          <figure>
+            <img src="/default-ogp.png" alt="サンプル画像" width="1200" height="630" loading="lazy" />
+            <figcaption>キャプション（figcaption）が入ります。</figcaption>
+          </figure>
+
+          <h3>コードブロック</h3>
+          <pre><code>{`---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="ページタイトル">
+  <main>...</main>
+</Layout>`}</code></pre>
+        </div>
+      </section>
+
+      {/* ==================== 2. 色見本 ==================== */}
+      <section class="guide-section" id="colors">
+        <h2 class="guide-heading">2. 色見本</h2>
+        <p class="guide-note">
+          <code>src/styles/_variable.scss</code> の色です。SCSS 内では <code>var.$color-primary</code> のように使います。
+        </p>
+
+        {
+          colorGroups.map((group) => (
+            <div class="swatch-group">
+              <h3 class="guide-subheading">{group.title}</h3>
+              <ul class="swatch-list">
+                {group.colors.map((name) => (
+                  <li class="swatch">
+                    <span class:list={["swatch-color", `swatch--${name}`]} />
+                    <code class="swatch-name">$color-{name}</code>
+                    <span class:list={["swatch-value", `swatch--${name}`]} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </section>
+
+      {/* ==================== 3. ボタン ==================== */}
+      <section class="guide-section" id="buttons">
+        <h2 class="guide-heading">3. ボタン</h2>
+        <p class="guide-note">
+          <code>&lt;Button&gt;</code>（<code>src/components/Button.astro</code>）。<code>href</code> を渡すとリンク、渡さないと <code>&lt;button&gt;</code> になります。
+        </p>
+
+        <h3 class="guide-subheading">種類（variant）</h3>
+        <div class="guide-row">
+          <Button href="#buttons">primary（初期値）</Button>
+          <Button href="#buttons" variant="outline">outline</Button>
+        </div>
+        <div class="guide-row guide-row--dark">
+          <Button href="#buttons" variant="white">white</Button>
+          <Button href="#buttons" variant="outline-white">outline-white</Button>
+          <span class="guide-caption">← 濃い背景の上で使う</span>
+        </div>
+
+        <h3 class="guide-subheading">大きさ（size）</h3>
+        <div class="guide-row">
+          <Button href="#buttons" size="sm">sm</Button>
+          <Button href="#buttons">md（初期値）</Button>
+          <Button href="#buttons" size="lg">lg</Button>
+        </div>
+
+        <h3 class="guide-subheading">押せない状態（disabled）</h3>
+        <div class="guide-row">
+          <Button disabled>primary</Button>
+          <Button variant="outline" disabled>outline</Button>
+        </div>
+
+        <pre class="guide-code"><code>{`<Button href="/contact/">お問い合わせ</Button>
+<Button variant="outline" size="sm">詳しく見る</Button>
+<Button type="submit" disabled>送信する</Button>`}</code></pre>
+      </section>
+
+      {/* ==================== 4. フォーム部品 ==================== */}
+      <section class="guide-section" id="forms">
+        <h2 class="guide-heading">4. フォーム部品</h2>
+        <p class="guide-note">
+          <code>src/styles/form.scss</code> のクラスを付けて使います。エラー状態は入力欄に <code>aria-invalid="true"</code> を付けます。
+        </p>
+
+        <form class="guide-form" onsubmit="return false;">
+          <div class="form-item">
+            <label class="form-label" for="sg-name">テキスト入力 <span class="form-required">必須</span></label>
+            <input class="form-input" type="text" id="sg-name" placeholder="例）山田 太郎" />
+          </div>
+
+          <div class="form-item">
+            <label class="form-label" for="sg-company">任意項目 <span class="form-optional">任意</span></label>
+            <input class="form-input" type="text" id="sg-company" aria-describedby="sg-company-help" />
+            <p class="form-help" id="sg-company-help">補足説明（form-help）が入ります。</p>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label" for="sg-email">エラー状態</label>
+            <input class="form-input" type="email" id="sg-email" value="example@" aria-invalid="true" aria-describedby="sg-email-error" />
+            <p class="form-error" id="sg-email-error">メールアドレスの形式が正しくありません。</p>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label" for="sg-disabled">入力できない状態</label>
+            <input class="form-input" type="text" id="sg-disabled" value="変更できません" disabled />
+          </div>
+
+          <div class="form-item">
+            <label class="form-label" for="sg-select">セレクト</label>
+            <select class="form-select" id="sg-select">
+              <option>選択してください</option>
+              <option>選択肢1</option>
+              <option>選択肢2</option>
+            </select>
+          </div>
+
+          <div class="form-item">
+            <label class="form-label" for="sg-textarea">テキストエリア</label>
+            <textarea class="form-textarea" id="sg-textarea" placeholder="お問い合わせ内容をご入力ください"></textarea>
+          </div>
+
+          <fieldset class="form-item">
+            <legend class="form-label">チェックボックス</legend>
+            <div class="form-choices">
+              <label class="form-check"><input type="checkbox" checked /><span>選択肢1</span></label>
+              <label class="form-check"><input type="checkbox" /><span>選択肢2</span></label>
+              <label class="form-check"><input type="checkbox" disabled /><span>選べない選択肢</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-item">
+            <legend class="form-label">ラジオボタン</legend>
+            <div class="form-choices">
+              <label class="form-check"><input type="radio" name="sg-radio" checked /><span>選択肢A</span></label>
+              <label class="form-check"><input type="radio" name="sg-radio" /><span>選択肢B</span></label>
+              <label class="form-check"><input type="radio" name="sg-radio" /><span>選択肢C</span></label>
+            </div>
+          </fieldset>
+        </form>
+      </section>
+
+      {/* ==================== 5-1. お知らせ枠 ==================== */}
+      <section class="guide-section" id="notice">
+        <h2 class="guide-heading">5-1. お知らせ枠</h2>
+        <p class="guide-note"><code>&lt;Notice&gt;</code>（<code>src/components/Notice.astro</code>）。<code>type</code> で種類、<code>title</code> で見出しを指定します。</p>
+
+        <div class="guide-stack">
+          <Notice title="お知らせ（info）">年末年始は12月29日〜1月3日まで休業いたします。</Notice>
+          <Notice type="success" title="完了（success）">お問い合わせを受け付けました。</Notice>
+          <Notice type="warning" title="注意（warning）">ご予約は3日前までにお願いいたします。</Notice>
+          <Notice type="error" title="エラー（error）">送信に失敗しました。時間をおいて再度お試しください。</Notice>
+          <Notice>見出しを省略した場合の表示です。<a href="#notice">リンク</a>も入れられます。</Notice>
+        </div>
+
+        <pre class="guide-code"><code>{`<Notice type="warning" title="注意">ご予約は3日前までにお願いいたします。</Notice>`}</code></pre>
+      </section>
+
+      {/* ==================== 5-2. 開閉式Q&A ==================== */}
+      <section class="guide-section" id="accordion">
+        <h2 class="guide-heading">5-2. 開閉式Q&amp;A</h2>
+        <p class="guide-note"><code>&lt;Accordion&gt;</code>（<code>src/components/Accordion.astro</code>）。ゆっくり開閉します（JavaScript が動かない環境でも、アニメーションなしで開閉できます）。同じ <code>name</code> を付けると、1つ開くとほかが閉じます。</p>
+
+        <div>
+          <Accordion title="制作期間はどのくらいかかりますか？" name="sg-faq" open>
+            ページ数や内容によって異なりますが、5ページ程度のサイトで1〜2か月が目安です。
+          </Accordion>
+          <Accordion title="公開後の更新もお願いできますか？" name="sg-faq">
+            はい、保守・運用プランにて承っております。軽微な修正であれば即日対応も可能です。
+          </Accordion>
+          <Accordion title="見積りは無料ですか？" name="sg-faq">
+            無料です。お問い合わせフォームよりお気軽にご相談ください。
+          </Accordion>
+        </div>
+
+        <pre class="guide-code"><code>{`<Accordion title="見積りは無料ですか？" name="faq">
+  無料です。お気軽にご相談ください。
+</Accordion>`}</code></pre>
+      </section>
+
+      {/* ==================== 5-3. ページ送り ==================== */}
+      <section class="guide-section" id="pagination">
+        <h2 class="guide-heading">5-3. ページ送り</h2>
+        <p class="guide-note"><code>&lt;Pagination&gt;</code>（<code>src/components/Pagination.astro</code>）。ページが多いときは間を「…」で省略します。</p>
+
+        <div class="guide-stack">
+          <div>
+            <p class="guide-caption">1ページ目 / 全3ページ</p>
+            <Pagination currentPage={1} totalPages={3} baseUrl="/blog/" />
+          </div>
+          <div>
+            <p class="guide-caption">5ページ目 / 全10ページ</p>
+            <Pagination currentPage={5} totalPages={10} baseUrl="/blog/" />
+          </div>
+          <div>
+            <p class="guide-caption">10ページ目 / 全10ページ</p>
+            <Pagination currentPage={10} totalPages={10} baseUrl="/blog/" />
+          </div>
+        </div>
+
+        <pre class="guide-code"><code>{`<Pagination currentPage={page.currentPage} totalPages={page.lastPage} baseUrl="/blog/" />`}</code></pre>
+      </section>
+
+      {/* ==================== 5-4. タグ・ラベル ==================== */}
+      <section class="guide-section" id="tags">
+        <h2 class="guide-heading">5-4. タグ・ラベル</h2>
+        <p class="guide-note"><code>&lt;Tag&gt;</code>（<code>src/components/Tag.astro</code>）。<code>href</code> を渡すとリンクになります。</p>
+
+        <h3 class="guide-subheading">カテゴリ（variant="category"）</h3>
+        <div class="guide-row">
+          <Tag variant="category" href="#tags">お知らせ</Tag>
+          <Tag variant="category" href="#tags">制作実績</Tag>
+          <Tag variant="category">リンクなし</Tag>
+        </div>
+
+        <h3 class="guide-subheading">タグ（初期値）</h3>
+        <div class="guide-row">
+          <Tag href="#tags">Astro</Tag>
+          <Tag href="#tags">Webデザイン</Tag>
+          <Tag href="#tags">SEO</Tag>
+          <Tag>リンクなし</Tag>
+        </div>
+
+        <pre class="guide-code"><code>{`<Tag variant="category" href="/blog/category/news/">お知らせ</Tag>
+<Tag href="/blog/tag/astro/">Astro</Tag>`}</code></pre>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    color: var.$color-gray-800;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var.$color-gray-200;
+    padding-bottom: 0.5rem;
+  }
+
+  .guide-lead {
+    color: var.$color-gray-600;
+    margin-bottom: 1.5rem;
+  }
+
+  /* 目次 */
+  .guide-toc ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    padding: 1rem 1.25rem;
+    background-color: var.$color-gray-50;
+    border: 1px solid var.$color-gray-200;
+    border-radius: 8px;
+
+    a {
+      color: var.$color-primary;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* セクション */
+  .guide-section {
+    padding-top: 4rem;
+    scroll-margin-top: 1rem;
+  }
+
+  .guide-heading {
+    font-size: 1.5rem;
+    color: var.$color-gray-900;
+    padding: 0.5rem 1rem;
+    background-color: var.$color-gray-100;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .guide-subheading {
+    font-size: 1rem;
+    color: var.$color-gray-700;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .guide-note {
+    color: var.$color-gray-600;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .guide-note code,
+  .guide-lead code {
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+    background-color: var.$color-gray-100;
+    font-size: 0.875em;
+  }
+
+  .guide-caption {
+    color: var.$color-gray-500;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-sample {
+    max-width: 800px;
+    padding: 2rem 1.5rem;
+    border: 1px dashed var.$color-gray-300;
+    border-radius: 8px;
+  }
+
+  .guide-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+
+    .guide-caption {
+      margin: 0;
+    }
+  }
+
+  .guide-row--dark {
+    padding: 1.5rem;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    background-color: var.$color-primary-deep;
+
+    .guide-caption {
+      color: var.$color-primary-light;
+    }
+  }
+
+  .guide-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .guide-code {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    background-color: var.$color-gray-900;
+    color: var.$color-gray-100;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .guide-form {
+    max-width: 640px;
+  }
+
+  /* 色見本 */
+  $swatches: (
+    "primary": var.$color-primary,
+    "primary-hover": var.$color-primary-hover,
+    "primary-deep": var.$color-primary-deep,
+    "primary-light": var.$color-primary-light,
+    "gray-50": var.$color-gray-50,
+    "gray-100": var.$color-gray-100,
+    "gray-200": var.$color-gray-200,
+    "gray-300": var.$color-gray-300,
+    "gray-400": var.$color-gray-400,
+    "gray-500": var.$color-gray-500,
+    "gray-600": var.$color-gray-600,
+    "gray-700": var.$color-gray-700,
+    "gray-800": var.$color-gray-800,
+    "gray-900": var.$color-gray-900,
+    "error": var.$color-error,
+  );
+
+  .swatch-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .swatch-color {
+    height: 4rem;
+    border: 1px solid var.$color-gray-200;
+    border-radius: 6px;
+    margin-bottom: 0.25rem;
+  }
+
+  .swatch-name {
+    color: var.$color-gray-800;
+  }
+
+  .swatch-value {
+    color: var.$color-gray-500;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @each $name, $value in $swatches {
+    .swatch-color.swatch--#{$name} {
+      background-color: $value;
+    }
+
+    /* 色の値（16進数）を SCSS の変数から表示する */
+    .swatch-value.swatch--#{$name}::before {
+      content: "#{$value}";
+    }
+  }
+</style>

@@ -24,5 +24,6 @@ export default defineConfig({
   },
   site: 'https://www.example.com', // テンプレート用の仮ドメイン
   trailingSlash: 'always',
-  integrations: [sitemap()]
+  // パーツ一覧（styleguide）は確認用ページなのでサイトマップから除外
+  integrations: [sitemap({ filter: (page) => !page.includes('/styleguide/') })]
 });

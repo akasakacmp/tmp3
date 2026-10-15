@@ -1,0 +1,131 @@
+---
+// src/components/Pagination.astro
+// ページ送り。1ページ目は baseUrl、2ページ目以降は baseUrl + "2/" の形のURLになります
+// （Astro の paginate() で src/pages/blog/[...page].astro を作った場合のURLと同じ形）
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string; // 例: "/blog/"（末尾に / を付ける）
+}
+
+const { currentPage, totalPages, baseUrl } = Astro.props;
+
+const pageUrl = (page: number) => (page === 1 ? baseUrl : `${baseUrl}${page}/`);
+
+// 表示するページ番号を決める（最初・最後・現在の前後1ページ。間は「…」で省略）
+const pages: (number | "ellipsis")[] = [];
+for (let page = 1; page <= totalPages; page++) {
+  if (page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1) {
+    pages.push(page);
+  } else if (pages[pages.length - 1] !== "ellipsis") {
+    pages.push("ellipsis");
+  }
+}
+---
+
+{
+  totalPages > 1 && (
+    <nav class="pagination" aria-label="ページ送り">
+      {currentPage > 1 ? (
+        <a href={pageUrl(currentPage - 1)} class="pagination-arrow" rel="prev">
+          <span aria-hidden="true">←</span> 前へ
+        </a>
+      ) : (
+        <span class="pagination-arrow is-disabled" aria-hidden="true">
+          ← 前へ
+        </span>
+      )}
+
+      <ol class="pagination-list">
+        {pages.map((page) =>
+          page === "ellipsis" ? (
+            <li class="pagination-ellipsis" aria-hidden="true">…</li>
+          ) : (
+            <li>
+              {page === currentPage ? (
+                <span class="pagination-link is-current" aria-current="page">
+                  {page}
+                </span>
+              ) : (
+                <a href={pageUrl(page)} class="pagination-link">
+                  {page}
+                </a>
+              )}
+            </li>
+          ),
+        )}
+      </ol>
+
+      {currentPage < totalPages ? (
+        <a href={pageUrl(currentPage + 1)} class="pagination-arrow" rel="next">
+          次へ <span aria-hidden="true">→</span>
+        </a>
+      ) : (
+        <span class="pagination-arrow is-disabled" aria-hidden="true">
+          次へ →
+        </span>
+      )}
+    </nav>
+  )
+}
+
+<style lang="scss">
+  .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .pagination-list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+    padding: 0;
+  }
+
+  .pagination-link,
+  .pagination-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    border: 1px solid var.$color-gray-200;
+    border-radius: 6px;
+    color: var.$color-gray-700;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  a.pagination-link:hover,
+  a.pagination-arrow:hover {
+    border-color: var.$color-primary;
+    color: var.$color-primary;
+  }
+
+  .pagination-link.is-current {
+    background-color: var.$color-primary;
+    border-color: var.$color-primary;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .pagination-arrow.is-disabled {
+    color: var.$color-gray-300;
+  }
+
+  .pagination-ellipsis {
+    padding: 0 0.25rem;
+    color: var.$color-gray-400;
+  }
+</style>

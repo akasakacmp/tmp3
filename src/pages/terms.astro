@@ -1,0 +1,97 @@
+---
+// src/pages/terms.astro
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+
+const pageTitle = "利用規約";
+const pageDescription = "当サイトのご利用にあたっての規約です。";
+
+const breadcrumbItems = [
+  { name: "Home", href: "/" },
+  { name: pageTitle },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="main-content">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <h1 class="page-title">{pageTitle}</h1>
+
+      {/* テンプレート用のサンプル文面です。実際の運用に合わせて内容を確認・修正してください */}
+      <div class="document">
+        <p>
+          この利用規約（以下「本規約」）は、株式会社サンプル（以下「当社」）が運営するWebサイト（以下「当サイト」）の利用条件を定めるものです。当サイトをご利用いただく際は、本規約に同意したものとみなします。
+        </p>
+
+        <h2>第1条（著作権）</h2>
+        <p>当サイトに掲載されている文章、画像、ロゴ等の著作権は、当社または正当な権利者に帰属します。私的利用の範囲を超えて、無断で複製・転載することを禁止します。</p>
+
+        <h2>第2条（禁止事項）</h2>
+        <p>当サイトの利用にあたり、以下の行為を禁止します。</p>
+        <ul>
+          <li>法令または公序良俗に違反する行為</li>
+          <li>当社または第三者の権利・利益を侵害する行為</li>
+          <li>当サイトの運営を妨げる行為</li>
+        </ul>
+
+        <h2>第3条（免責事項）</h2>
+        <p>当社は、当サイトに掲載する情報の正確性に努めますが、その内容を保証するものではありません。当サイトの利用により生じた損害について、当社は一切の責任を負いません。</p>
+
+        <h2>第4条（リンクについて）</h2>
+        <p>当サイトへのリンクは原則として自由です。ただし、当社の信用を損なうおそれのあるサイトからのリンクはお断りします。</p>
+
+        <h2>第5条（規約の変更）</h2>
+        <p>当社は、必要に応じて本規約を変更することがあります。変更後の規約は、当サイトに掲載した時点から効力を生じるものとします。</p>
+
+        <h2>第6条（準拠法・管轄）</h2>
+        <p>本規約は日本法に準拠し、当サイトに関する紛争については、当社所在地を管轄する裁判所を専属的合意管轄とします。</p>
+
+        <p class="date">制定日：2025年4月1日</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    color: var.$color-gray-800;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var.$color-gray-200;
+    padding-bottom: 0.5rem;
+  }
+
+  .document {
+    max-width: 800px;
+    margin: 0 auto;
+    color: var.$color-gray-600;
+    line-height: 1.8;
+
+    h2 {
+      font-size: 1.25rem;
+      color: var.$color-gray-900;
+      margin: 2rem 0 0.75rem;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .date {
+    margin-top: 3rem;
+    text-align: right;
+  }
+</style>

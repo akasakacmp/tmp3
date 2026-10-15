@@ -2,6 +2,8 @@
 // src/layouts/Layout.astro
 import "../styles/reset.css";
 import "@fontsource-variable/noto-sans-jp";
+import "../styles/content.scss";
+import "../styles/form.scss";
 import SEO from "../components/SEO.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
@@ -42,8 +44,10 @@ const { title, description, noindex, ogImage, ogType } = Astro.props;
   body {
     display: flex;
     flex-direction: column;
+    background-color: #ffffff;
     font-family: "Noto Sans JP", sans-serif;
     min-height: 100vh;
+    height: auto; /* reset.css の height: 100% を解除（ヘッダーの sticky が途中で外れるため） */
     margin: 0;
   }
 </style>

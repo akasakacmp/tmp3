@@ -1,0 +1,54 @@
+---
+// src/components/Tag.astro
+// タグ・カテゴリのラベル。href を渡すとリンクになります
+
+interface Props {
+  href?: string;
+  variant?: "category" | "tag"; // category: 塗りつぶし / tag: 枠線
+}
+
+const { href, variant = "tag" } = Astro.props;
+const Element = href ? "a" : "span";
+---
+
+<Element href={href} class:list={["tag", `tag--${variant}`]}>
+  {variant === "tag" && <span aria-hidden="true">#</span>}
+  <slot />
+</Element>
+
+<style lang="scss">
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.125rem 0.625rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .tag--category {
+    background-color: var.$color-primary;
+    color: #ffffff;
+  }
+
+  a.tag--category:hover {
+    background-color: var.$color-primary-hover;
+  }
+
+  .tag--tag {
+    border: 1px solid var.$color-gray-300;
+    background-color: #ffffff;
+    color: var.$color-gray-600;
+  }
+
+  a.tag--tag:hover {
+    border-color: var.$color-primary;
+    color: var.$color-primary;
+  }
+</style>

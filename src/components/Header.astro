@@ -10,7 +10,7 @@ const navItems = [
 ];
 ---
 
-<header class="header">
+<header class="header" id="js-header">
   <div class="header-container">
     <a href="/" class="logo">
       {/* サイトロゴ。画像に差し替えてもOK */}
@@ -54,6 +54,16 @@ const navItems = [
     position: sticky;
     top: 0;
     z-index: 100;
+    transition: transform 0.3s ease;
+
+    /* 下スクロール時に隠す（キーボード操作でヘッダー内にフォーカスがある間は表示） */
+    &.is-hidden:not(:focus-within) {
+      transform: translateY(-100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
   }
 
   .header-container {
@@ -68,7 +78,7 @@ const navItems = [
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #1e293b;
+    color: var.$color-gray-800;
     text-decoration: none;
     line-height: 1;
   }
@@ -87,12 +97,12 @@ const navItems = [
   }
 
   .nav-link {
-    color: #475569;
+    color: var.$color-gray-600;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
     &:hover {
-      color: #2563eb;
+      color: var.$color-primary;
     }
   }
 
@@ -113,7 +123,7 @@ const navItems = [
   .hamburger-line {
     width: 100%;
     height: 2px;
-    background-color: #1e293b;
+    background-color: var.$color-gray-800;
     transition: all 0.3s linear;
     transform-origin: 1px;
   }
@@ -144,6 +154,11 @@ const navItems = [
 
   /* モバイル展開時のメニュー */
   @include var.media_query_sp {
+    /* メニュー展開中はページ全体のスクロールを止める（クラスはJavaScriptで <html> に付与） */
+    :global(html.is-menu-open) {
+      overflow: hidden;
+    }
+
     .global-nav {
       position: absolute;
       top: 100%;
@@ -161,7 +176,7 @@ const navItems = [
       flex-direction: column;
       gap: 0;
       li {
-        border-top: 1px solid #f1f5f9;
+        border-top: 1px solid var.$color-gray-100;
       }
     }
 
@@ -183,18 +198,75 @@ const navItems = [
     const nav = document.getElementById("js-global-nav");
 
     if (toggleBtn && nav) {
-      toggleBtn.addEventListener("click", () => {
-        const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
-
+      const setMenuOpen = (isOpen: boolean) => {
         // アクセシビリティ属性の更新
-        toggleBtn.setAttribute("aria-expanded", String(!isExpanded));
+        toggleBtn.setAttribute("aria-expanded", String(isOpen));
 
         // メニューの表示/非表示クラスの切り替え
-        nav.classList.toggle("is-active");
+        nav.classList.toggle("is-active", isOpen);
+
+        // メニュー展開中は背景のページをスクロールさせない
+        document.documentElement.classList.toggle("is-menu-open", isOpen);
+      };
+
+      toggleBtn.addEventListener("click", () => {
+        const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+        setMenuOpen(!isExpanded);
+      });
+
+      // メニューを開いたままタブレット・PC幅に広げた場合は閉じる（スクロール禁止が残らないように）
+      window.matchMedia("(min-width: 768px)").addEventListener("change", (e) => {
+        if (e.matches) setMenuOpen(false);
       });
     }
   };
 
+  // スクロール方向に応じたヘッダーの表示/非表示
+  // 下にスクロールしたら隠し、上にスクロールしたら表示する
+  const setupHideOnScroll = () => {
+    const header = document.getElementById("js-header");
+    const toggleBtn = document.getElementById("js-menu-toggle");
+    if (!header) return;
+
+    const THRESHOLD = 5; // 小さな揺れで切り替わらないようにするための最小スクロール量(px)
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      const currentY = window.scrollY;
+      const diff = currentY - lastY;
+      const isMenuOpen = toggleBtn?.getAttribute("aria-expanded") === "true";
+
+      if (currentY <= header.offsetHeight || isMenuOpen) {
+        // ページ上部付近、またはモバイルメニュー展開中は常に表示
+        header.classList.remove("is-hidden");
+      } else if (diff > THRESHOLD) {
+        header.classList.add("is-hidden");
+      } else if (diff < -THRESHOLD) {
+        header.classList.remove("is-hidden");
+      }
+
+      if (Math.abs(diff) > THRESHOLD) {
+        lastY = currentY;
+      }
+      ticking = false;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true },
+    );
+  };
+
   // DOMの読み込みが完了したら実行
-  document.addEventListener("DOMContentLoaded", setupMenu);
+  document.addEventListener("DOMContentLoaded", () => {
+    setupMenu();
+    setupHideOnScroll();
+  });
 </script>

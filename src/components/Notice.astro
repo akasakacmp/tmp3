@@ -1,0 +1,90 @@
+---
+// src/components/Notice.astro
+// お知らせ・注意書きの枠
+
+interface Props {
+  type?: "info" | "success" | "warning" | "error";
+  title?: string;
+}
+
+const { type = "info", title } = Astro.props;
+
+// 先頭に表示するアイコン（文字で表現）
+const icons = {
+  info: "i",
+  success: "✓",
+  warning: "!",
+  error: "×",
+};
+
+// エラーと警告はスクリーンリーダーにすぐ伝わるように role="alert" を付ける
+const role = type === "error" || type === "warning" ? "alert" : "note";
+---
+
+<div class:list={["notice", `notice--${type}`]} role={role}>
+  <span class="notice-icon" aria-hidden="true">{icons[type]}</span>
+  <div class="notice-body">
+    {title && <p class="notice-title">{title}</p>}
+    <div class="notice-text"><slot /></div>
+  </div>
+</div>
+
+<style lang="scss">
+  // 種類ごとの色（背景・枠線・アイコン/タイトル）
+  // info はサイトのアクセントカラー、それ以外は一般的な意味の色（緑=成功、黄=注意、赤=エラー）
+  $types: (
+    ("info", #fff7ed, #fed7aa, var.$color-primary),
+    ("success", #f0fdf4, #bbf7d0, #15803d),
+    ("warning", #fefce8, #fde047, #a16207),
+    ("error", #fef2f2, #fecaca, #b91c1c),
+  );
+
+  .notice {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid;
+    border-radius: 8px;
+    color: var.$color-gray-700;
+    line-height: 1.7;
+  }
+
+  @each $name, $bg, $border, $accent in $types {
+    .notice--#{$name} {
+      background-color: $bg;
+      border-color: $border;
+
+      .notice-icon {
+        background-color: $accent;
+      }
+
+      .notice-title {
+        color: $accent;
+      }
+    }
+  }
+
+  .notice-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.1rem;
+    border-radius: 50%;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+
+  .notice-title {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+
+  .notice-text :global(a) {
+    color: inherit;
+    text-decoration: underline;
+  }
+</style>

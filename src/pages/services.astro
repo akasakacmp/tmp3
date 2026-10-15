@@ -1,0 +1,125 @@
+---
+// src/pages/services.astro
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import Button from "../components/Button.astro";
+
+const pageTitle = "サービス";
+const pageDescription = "Webサイト制作、システム開発、マーケティング支援など、当社のサービスをご紹介します。";
+
+const breadcrumbItems = [
+  { name: "Home", href: "/" },
+  { name: pageTitle },
+];
+
+// サービス一覧（テンプレート用のダミーデータ）
+const services = [
+  {
+    title: "Webサイト制作",
+    description:
+      "コーポレートサイトやサービスサイト、LPなどを企画・デザインから制作します。スマートフォン対応やSEO対策も標準で行います。",
+  },
+  {
+    title: "Webシステム開発",
+    description:
+      "予約システムや会員サイト、管理画面など、業務に合わせたWebシステムを開発します。既存システムの改修もご相談ください。",
+  },
+  {
+    title: "Webマーケティング支援",
+    description:
+      "アクセス解析をもとにした改善提案や、広告運用、SNS運用など、集客と成果につながる施策をサポートします。",
+  },
+  {
+    title: "保守・運用",
+    description:
+      "公開後の更新作業やサーバー管理、セキュリティ対策を代行します。安心してサイトを運用いただけます。",
+  },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="main-content">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <h1 class="page-title">{pageTitle}</h1>
+
+      <p class="intro">
+        お客様の目的や課題に合わせて、最適なサービスをご提案します。<br />
+        まずはお気軽にご相談ください。
+      </p>
+
+      <ul class="service-list">
+        {
+          services.map((service) => (
+            <li class="service-card">
+              <h2>{service.title}</h2>
+              <p>{service.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="cta">
+        <Button href="/contact/">お問い合わせはこちら</Button>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    color: var.$color-gray-800;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var.$color-gray-200;
+    padding-bottom: 0.5rem;
+  }
+
+  .intro {
+    color: var.$color-gray-600;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .service-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @include var.media_query_tablet_up {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .service-card {
+    background-color: var.$color-gray-50;
+    border: 1px solid var.$color-gray-200;
+    border-radius: 8px;
+    padding: 1.5rem;
+    line-height: 1.6;
+    color: var.$color-gray-600;
+
+    h2 {
+      color: var.$color-gray-900;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .cta {
+    margin-top: 3rem;
+    text-align: center;
+  }
+</style>

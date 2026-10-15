@@ -1,0 +1,149 @@
+/*----------------------------------------------
+form
+フォーム部品の共通スタイル
+
+使い方:
+  <div class="form-item">
+    <label class="form-label" for="name">お名前 <span class="form-required">必須</span></label>
+    <input class="form-input" type="text" id="name" />
+  </div>
+----------------------------------------------*/
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  & + & {
+    margin-top: 1.5rem;
+  }
+}
+
+/* チェックボックス・ラジオのグループを fieldset で囲む場合の初期スタイル解除 */
+fieldset.form-item {
+  border: none;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+  min-width: 0;
+
+  legend {
+    padding: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.form-label {
+  font-weight: bold;
+  color: var.$color-gray-800;
+}
+
+.form-required,
+.form-optional {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+.form-required {
+  background-color: var.$color-error;
+  color: #ffffff;
+}
+
+.form-optional {
+  background-color: var.$color-gray-200;
+  color: var.$color-gray-600;
+}
+
+/* テキスト入力・セレクト・テキストエリア */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var.$color-gray-300;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: var.$color-gray-900;
+
+  &::placeholder {
+    color: var.$color-gray-400;
+  }
+
+  &:focus {
+    outline: 2px solid var.$color-primary;
+    outline-offset: 1px;
+    border-color: var.$color-primary;
+  }
+
+  &:disabled {
+    background-color: var.$color-gray-100;
+    color: var.$color-gray-400;
+    cursor: not-allowed;
+  }
+
+  /* エラー状態（aria-invalid="true" を付ける） */
+  &[aria-invalid="true"] {
+    border-color: var.$color-error;
+    background-color: #fef2f2;
+
+    &:focus {
+      outline-color: var.$color-error;
+    }
+  }
+}
+
+.form-textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+/* 補足説明とエラーメッセージ */
+.form-help {
+  font-size: 0.875rem;
+  color: var.$color-gray-500;
+}
+
+.form-error {
+  font-size: 0.875rem;
+  color: var.$color-error;
+
+  &::before {
+    content: "※ ";
+  }
+}
+
+/* チェックボックス・ラジオボタン */
+.form-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  border: none;
+  padding: 0;
+}
+
+.form-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var.$color-gray-700;
+
+  input {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var.$color-primary; /* チェック時の色をアクセントカラーにする */
+    cursor: pointer;
+  }
+
+  input:disabled,
+  input:disabled + span {
+    cursor: not-allowed;
+    color: var.$color-gray-400;
+  }
+}

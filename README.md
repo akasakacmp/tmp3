@@ -33,6 +33,7 @@ npm run preview
 | デフォルトの説明文 | `src/components/SEO.astro` の `finalDesc` |
 | ヘッダーのナビゲーション | `src/components/Header.astro` の `navItems` |
 | フッターのリンク・説明文 | `src/components/Footer.astro` の `footerLinks` と `.footer-description` |
+| 配色（アクセントカラー・グレー） | `src/styles/_variable.scss` の `$color-*` |
 | OGP画像 | `public/default-ogp.png` |
 | ファビコン | `public/favicon.ico` と `public/favicon.svg` |
 
@@ -49,17 +50,43 @@ src/
 │  ├─ SEO.astro              title / description / canonical / noindex / OGP / Twitterカード
 │  ├─ Header.astro           上部固定ヘッダー（スマホではハンバーガーメニュー）
 │  ├─ Footer.astro           フッター（コピーライトの年は自動）
-│  └─ Breadcrumbs.astro      パンくずリスト＋構造化データ（JSON-LD）
+│  ├─ Breadcrumbs.astro      パンくずリスト＋構造化データ（JSON-LD）
+│  ├─ Button.astro           ボタン（種類・大きさ・押せない状態）
+│  ├─ Notice.astro           お知らせ・注意書きの枠
+│  ├─ Accordion.astro        開閉式Q&A（開閉アニメーション付き）
+│  ├─ Pagination.astro       ページ送り
+│  └─ Tag.astro              タグ・カテゴリのラベル
 ├─ pages/
-│  ├─ index.astro            使い方のサンプルページ
+│  ├─ index.astro            トップページ（ダミー）
+│  ├─ about.astro            会社概要（ダミー）
+│  ├─ services.astro         サービス一覧（ダミー）
+│  ├─ contact.astro          お問い合わせフォーム（見た目のみ）
+│  ├─ privacy.astro          プライバシーポリシー（サンプル文面）
+│  ├─ terms.astro            利用規約（サンプル文面）
+│  ├─ styleguide.astro       パーツ一覧（noindex・サイトマップ対象外）
 │  └─ 404.astro              404ページ（noindex）
 └─ styles/
-   ├─ _variable.scss         ブレークポイントの mixin と vw() 関数
+   ├─ _variable.scss         色・ブレークポイントの変数、mixin、vw() 関数
+   ├─ content.scss           文章エリア（.content）のタグの見た目
+   ├─ form.scss              フォーム部品の見た目
    └─ reset.css              リセットCSS（Josh Comeau）
 public/
 ├─ default-ogp.png           仮のOGP画像
 ├─ favicon.ico / favicon.svg
 └─ robots.txt
+```
+
+## パーツ一覧
+
+開発サーバーで `/styleguide/` を開くと、タグの見た目・色・ボタン・フォーム部品・各コンポーネントの見本と使い方を確認できます。
+検索結果に出ないよう noindex にし、サイトマップからも除外しています。
+
+ブログ本文など、Markdown から作られる部分は `class="content"` で囲むと見た目が整います。
+
+```astro
+<div class="content">
+  <Content />
+</div>
 ```
 
 ## Layout の使い方
@@ -192,7 +219,8 @@ const { Content } = await render(post);
 ## 注意点
 
 - `astro.config.mjs` で `trailingSlash: 'always'` にしているため、URLの末尾には必ず `/` が付きます。サイト内リンクは `/about/` のように末尾に `/` を付けて書いてください（`/about` だと開発サーバーで404になります）。
-- ヘッダー・フッターのリンク先（about / services / contact / privacy / terms）のページは用意していないので、必要に応じて `src/pages/` に作成してください。
+- about / services / contact / privacy / terms のページはダミーの内容です。会社情報や規約の文面は実際の内容に差し替えてください。
+- contact ページのフォームは見た目だけで、送信処理はありません。フォームサービスやAPIに合わせて実装してください。
 
 ## 参考
 

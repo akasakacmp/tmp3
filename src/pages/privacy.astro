@@ -1,0 +1,104 @@
+---
+// src/pages/privacy.astro
+import Layout from "../layouts/Layout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+
+const pageTitle = "プライバシーポリシー";
+const pageDescription = "当社における個人情報の取り扱いについてご説明します。";
+
+const breadcrumbItems = [
+  { name: "Home", href: "/" },
+  { name: pageTitle },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="main-content">
+    <div class="container">
+      <Breadcrumbs items={breadcrumbItems} />
+      <h1 class="page-title">{pageTitle}</h1>
+
+      {/* テンプレート用のサンプル文面です。実際の運用に合わせて内容を確認・修正してください */}
+      <div class="document">
+        <p>
+          株式会社サンプル（以下「当社」）は、お客様の個人情報を適切に取り扱うことを社会的責務と考え、以下の方針に基づき個人情報の保護に努めます。
+        </p>
+
+        <h2>1. 個人情報の取得</h2>
+        <p>当社は、お問い合わせフォーム等を通じて、氏名、会社名、メールアドレス等の個人情報を適法かつ公正な手段により取得します。</p>
+
+        <h2>2. 利用目的</h2>
+        <p>取得した個人情報は、以下の目的の範囲内で利用します。</p>
+        <ul>
+          <li>お問い合わせへの回答およびご連絡のため</li>
+          <li>サービスのご案内およびお見積りのため</li>
+          <li>サービスの改善および新サービスの検討のため</li>
+        </ul>
+
+        <h2>3. 第三者への提供</h2>
+        <p>当社は、法令に基づく場合を除き、ご本人の同意なく個人情報を第三者に提供しません。</p>
+
+        <h2>4. 安全管理</h2>
+        <p>当社は、個人情報の漏えい、滅失またはき損を防止するため、必要かつ適切な安全管理措置を講じます。</p>
+
+        <h2>5. アクセス解析ツールについて</h2>
+        <p>当サイトでは、サイトの利用状況を把握するためにアクセス解析ツールを利用する場合があります。これらのツールはCookieを使用しますが、個人を特定する情報は含みません。</p>
+
+        <h2>6. 開示・訂正・削除等のご請求</h2>
+        <p>ご本人から個人情報の開示、訂正、利用停止、削除等のご請求があった場合は、ご本人であることを確認のうえ、速やかに対応します。</p>
+
+        <h2>7. お問い合わせ窓口</h2>
+        <p>本ポリシーに関するお問い合わせは、<a href="/contact/">お問い合わせフォーム</a>よりご連絡ください。</p>
+
+        <p class="date">制定日：2025年4月1日</p>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style lang="scss">
+  .main-content {
+    padding: 2rem 0 4rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    color: var.$color-gray-800;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var.$color-gray-200;
+    padding-bottom: 0.5rem;
+  }
+
+  .document {
+    max-width: 800px;
+    margin: 0 auto;
+    color: var.$color-gray-600;
+    line-height: 1.8;
+
+    h2 {
+      font-size: 1.25rem;
+      color: var.$color-gray-900;
+      margin: 2rem 0 0.75rem;
+    }
+
+    ul {
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    a {
+      color: var.$color-primary;
+    }
+  }
+
+  .date {
+    margin-top: 3rem;
+    text-align: right;
+  }
+</style>

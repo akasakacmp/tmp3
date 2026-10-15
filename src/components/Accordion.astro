@@ -1,0 +1,172 @@
+---
+// src/components/Accordion.astro
+// 開閉式のQ&A。<details> / <summary> を使っているので、JavaScript がなくても開閉できます
+// JavaScript が動く環境では、開閉時に高さをアニメーションさせます
+// 同じ name を付けた Accordion は、どれか1つだけが開く
+
+interface Props {
+  title: string;
+  open?: boolean;
+  name?: string;
+}
+
+const { title, open = false, name } = Astro.props;
+---
+
+<details class="accordion" open={open} name={name}>
+  <summary class="accordion-summary">
+    <span class="accordion-mark" aria-hidden="true">Q</span>
+    <span class="accordion-title">{title}</span>
+  </summary>
+  {/* アニメーションで高さを変えるための外枠（余白は内側の accordion-body に付ける） */}
+  <div class="accordion-content">
+    <div class="accordion-body">
+      <slot />
+    </div>
+  </div>
+</details>
+
+<style lang="scss">
+  .accordion {
+    border-bottom: 1px solid var.$color-gray-200;
+
+    &:first-of-type {
+      border-top: 1px solid var.$color-gray-200;
+    }
+  }
+
+  .accordion-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+    list-style: none; /* デフォルトの三角を消す */
+    font-weight: bold;
+    color: var.$color-gray-800;
+
+    &::-webkit-details-marker {
+      display: none; /* Safari のデフォルトの三角を消す */
+    }
+
+    /* 右端の開閉アイコン（＋/−） */
+    &::after {
+      content: "+";
+      margin-left: auto;
+      font-size: 1.25rem;
+      line-height: 1;
+      color: var.$color-primary;
+      transition: transform 0.2s ease;
+    }
+
+    &:hover .accordion-title {
+      color: var.$color-primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var.$color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  .accordion[open] > .accordion-summary::after {
+    content: "−";
+  }
+
+  /* 閉じるアニメーション中は、先にアイコンを「+」に戻す */
+  .accordion.is-closing > .accordion-summary::after {
+    content: "+";
+  }
+
+  .accordion-content {
+    overflow: hidden;
+  }
+
+  .accordion-mark {
+    flex-shrink: 0;
+    color: var.$color-primary;
+    font-size: 1.125rem;
+  }
+
+  .accordion-body {
+    padding: 0 0.5rem 1.25rem 2.25rem;
+    color: var.$color-gray-600;
+    line-height: 1.8;
+  }
+</style>
+
+<script>
+  // 開閉アニメーション
+  // <details> は標準では一瞬で開閉するため、クリック時の動作を止めて高さをアニメーションさせる
+  const DURATION = 300; // アニメーションの時間（ミリ秒）
+
+  const prefersReducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const animateHeight = (element: HTMLElement, from: number, to: number) =>
+    element.animate(
+      { height: [`${from}px`, `${to}px`] },
+      { duration: DURATION, easing: "ease-out" },
+    );
+
+  const openAccordion = (details: HTMLDetailsElement) => {
+    const content = details.querySelector<HTMLElement>(".accordion-content");
+    details.open = true;
+    if (!content || prefersReducedMotion()) return;
+    animateHeight(content, 0, content.offsetHeight);
+  };
+
+  const closeAccordion = (details: HTMLDetailsElement) => {
+    const content = details.querySelector<HTMLElement>(".accordion-content");
+    if (!content || prefersReducedMotion()) {
+      details.open = false;
+      return;
+    }
+    details.classList.add("is-closing");
+    animateHeight(content, content.offsetHeight, 0)
+      .finished.then(() => {
+        details.open = false;
+      })
+      .catch(() => {}) // アニメーションが中断された場合は何もしない
+      .finally(() => {
+        details.classList.remove("is-closing");
+      });
+  };
+
+  const setupAccordions = () => {
+    const accordions = document.querySelectorAll<HTMLDetailsElement>("details.accordion");
+
+    accordions.forEach((details) => {
+      // name による「1つだけ開く」動作はブラウザに任せると、ほかの項目が一瞬で閉じてしまう
+      // そのため name を data-group に移し、JavaScript 側で閉じるアニメーションを付ける
+      const group = details.getAttribute("name");
+      if (group) {
+        details.dataset.group = group;
+        details.removeAttribute("name");
+      }
+
+      const summary = details.querySelector("summary");
+      summary?.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (details.classList.contains("is-closing")) return; // 閉じている途中のクリックは無視
+
+        if (details.open) {
+          closeAccordion(details);
+          return;
+        }
+
+        // 同じグループで開いている項目を閉じる
+        if (details.dataset.group) {
+          accordions.forEach((other) => {
+            if (other !== details && other.open && other.dataset.group === details.dataset.group) {
+              closeAccordion(other);
+            }
+          });
+        }
+        openAccordion(details);
+      });
+    });
+  };
+
+  setupAccordions();
+</script>

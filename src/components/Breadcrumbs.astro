@@ -61,7 +61,7 @@ const breadcrumbSchema = {
   set:html={JSON.stringify(breadcrumbSchema)}
 />
 
-<style>
+<style lang="scss">
   /* テンプレート用の最低限のスタイル（プロジェクトに合わせて調整してください） */
   .breadcrumb-nav {
     font-size: 0.875rem; /* 14px相当 */
@@ -84,24 +84,24 @@ const breadcrumbSchema = {
   }
 
   .breadcrumb-item a {
-    color: #2563eb;
+    color: var.$color-primary;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
 
   .breadcrumb-item a:hover {
-    color: #1d4ed8;
+    color: var.$color-primary-hover;
   }
 
   .breadcrumb-item span {
-    color: #64748b;
+    color: var.$color-gray-500;
   }
 
   /* 区切り文字（>）をCSSで追加 */
   .breadcrumb-item:not(:last-child)::after {
     content: ">";
     margin-left: 0.5rem;
-    color: #94a3b8;
+    color: var.$color-gray-400;
     font-size: 0.8em;
   }
 </style>
